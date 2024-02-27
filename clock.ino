@@ -79,7 +79,7 @@ void setup() {
   // oled.setTextSize(1);         // set text size
   // oled.setTextColor(WHITE);    // set text color
   // oled.setCursor(0, 2);       // set position to display (x,y)
-  // oled.println("Robotronix"); // set text
+  // oled.println("cgbarros"); // set text
   oled.display();              // display on OLED
 }
 
