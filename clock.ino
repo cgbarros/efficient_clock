@@ -30,6 +30,97 @@ void hour_top_i(uint16_t color) {
   oled.drawLine(20, 1, 20, 11, color);
 }
 
+// Painting the hours
+
+void hour(int n) {
+  switch(n) {
+    case 1:
+      hour_top_v(BLACK);
+      hour_bottom_v(BLACK);
+      hour_left_i(WHITE);
+      hour_right_i(BLACK);
+      hour_top_i(BLACK);
+      break;
+    case 2:
+      hour_top_v(BLACK);
+      hour_bottom_v(BLACK);
+      hour_left_i(WHITE);
+      hour_right_i(WHITE);
+      hour_top_i(BLACK);
+      break;
+    case 3:
+      hour_top_v(BLACK);
+      hour_bottom_v(BLACK);
+      hour_left_i(WHITE);
+      hour_right_i(WHITE);
+      hour_top_i(WHITE);
+      break;
+    case 4:
+      hour_top_v(WHITE);
+      hour_bottom_v(BLACK);
+      hour_left_i(WHITE);
+      hour_right_i(BLACK);
+      hour_top_i(BLACK);
+      break;
+    case 5:
+      hour_top_v(WHITE);
+      hour_bottom_v(BLACK);
+      hour_left_i(BLACK);
+      hour_right_i(BLACK);
+      hour_top_i(BLACK);
+      break;
+    case 6:
+      hour_top_v(WHITE);
+      hour_bottom_v(BLACK);
+      hour_left_i(BLACK);
+      hour_right_i(WHITE);
+      hour_top_i(BLACK);
+      break;
+    case 7:
+      hour_top_v(WHITE);
+      hour_bottom_v(BLACK);
+      hour_left_i(BLACK);
+      hour_right_i(WHITE);
+      hour_top_i(WHITE);
+      break;
+    case 8:
+      hour_top_v(WHITE);
+      hour_bottom_v(BLACK);
+      hour_left_i(WHITE);
+      hour_right_i(WHITE);
+      hour_top_i(WHITE);
+      break;
+    case 9:
+      hour_top_v(WHITE);
+      hour_bottom_v(WHITE);
+      hour_left_i(WHITE);
+      hour_right_i(BLACK);
+      hour_top_i(BLACK);
+      break;
+    case 10:
+      hour_top_v(WHITE);
+      hour_bottom_v(WHITE);
+      hour_left_i(BLACK);
+      hour_right_i(BLACK);
+      hour_top_i(BLACK);
+      break;
+    case 11:
+      hour_top_v(WHITE);
+      hour_bottom_v(WHITE);
+      hour_left_i(BLACK);
+      hour_right_i(WHITE);
+      hour_top_i(BLACK);
+      break;
+    case 12:
+      hour_top_v(WHITE);
+      hour_bottom_v(WHITE);
+      hour_left_i(WHITE);
+      hour_right_i(WHITE);
+      hour_top_i(BLACK);
+      break;
+  }
+}
+
 void separator(uint16_t color) {
   oled.fillCircle(46, 22, 2, color);
   oled.fillCircle(46, 42, 2, color);
@@ -79,25 +170,25 @@ void setup() {
     while (1);
   }
 
-  delay(2000);         // wait two seconds for initializing
-  oled.clearDisplay(); // clear display
+  // delay(2000);         // wait two seconds for initializing
+  // oled.clearDisplay(); // clear display
 
-  hour_top_v(WHITE);
-  hour_bottom_v(WHITE);
-  hour_left_i(WHITE);
-  hour_right_i(WHITE);
-  hour_top_i(WHITE);
+  // hour_top_v(WHITE);
+  // hour_bottom_v(WHITE);
+  // hour_left_i(WHITE);
+  // hour_right_i(WHITE);
+  // hour_top_i(WHITE);
 
   separator(WHITE);
 
-  min_dec_bottom(WHITE);
-  min_dec_left_i(WHITE);
-  min_dec_right_i(WHITE);
+  // min_dec_bottom(WHITE);
+  // min_dec_left_i(WHITE);
+  // min_dec_right_i(WHITE);
   
-  min_uni_v(WHITE);
-  min_uni_top(WHITE);
-  min_uni_left(WHITE);
-  min_uni_right(WHITE);
+  // min_uni_v(WHITE);
+  // min_uni_top(WHITE);
+  // min_uni_left(WHITE);
+  // min_uni_right(WHITE);
 
   
   
@@ -110,13 +201,26 @@ void setup() {
   oled.display();              // display on OLED
 }
 
+int i = 1;
+
 void loop() {
+  if (i == 13) {
+    i = 1;
+  }
 
   delay(500);
+  oled.clearDisplay();
   separator(BLACK);
   oled.display();
   delay(500);
+  oled.clearDisplay();
   separator(WHITE);
+  hour(i);
+  // oled.setTextSize(1);         // set text size
+  // oled.setTextColor(WHITE);    // set text color
+  // oled.setCursor(0, 2);       // set position to display (x,y)
+  // oled.println(12);
+  // oled.println(i);
+  i += 1;
   oled.display();
-
 }
