@@ -1,10 +1,16 @@
 #include <Wire.h>
+#include <time.h>
+#include <WiFi.h>
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
 
+const char* ssid     = "Pagliacci";
+const char* password = "betegenidora";
+long timezone = -3;
+
+
 #define SCREEN_WIDTH 128 // OLED width,  in pixels
 #define SCREEN_HEIGHT 64 // OLED height, in pixels
-
 // create an OLED display object connected to I2C
 Adafruit_SSD1306 oled(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, -1);
 
@@ -288,6 +294,27 @@ void demo(int h, int m) {
   oled.display();
 }
 
+void show_all() {
+  hour_top_v(WHITE);
+  hour_bottom_v(WHITE);
+  hour_left_i(WHITE);
+  hour_right_i(WHITE);
+  hour_top_i(WHITE);
+
+  separator(WHITE);
+
+  min_dec_bottom(WHITE);
+  min_dec_left_i(WHITE);
+  min_dec_right_i(WHITE);
+  
+  min_uni_v(WHITE);
+  min_uni_top(WHITE);
+  min_uni_left(WHITE);
+  min_uni_right(WHITE);
+
+  oled.display();
+}
+
 void setup() {
   Serial.begin(9600);
 
@@ -296,36 +323,63 @@ void setup() {
     Serial.println(F("failed to start SSD1306 OLED"));
     while (1);
   }
+  oled.clearDisplay();
 
-  // delay(2000);         // wait two seconds for initializing
-  oled.clearDisplay(); // clear display
+  Serial.println();
+  Serial.println();
+  Serial.print("Connecting to ");
+  Serial.println(ssid);
 
-  // hour_top_v(WHITE);
-  // hour_bottom_v(WHITE);
-  // hour_left_i(WHITE);
-  // hour_right_i(WHITE);
-  // hour_top_i(WHITE);
+  WiFi.begin(ssid, password);
 
-  // separator(WHITE);
+  int i = 0;
 
-  // min_dec_bottom(WHITE);
-  // min_dec_left_i(WHITE);
-  // min_dec_right_i(WHITE);
-  
-  // min_uni_v(WHITE);
-  // min_uni_top(WHITE);
-  // min_uni_left(WHITE);
-  // min_uni_right(WHITE);
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
+    if (i > 20) {
+      ESP.restart();
+    }
+    i++;
+  }
+  Serial.println("WiFi connected");
+  Serial.println("IP address: ");
+  Serial.println(WiFi.localIP());
 
-  oled.display();
+  Serial.println("Contacting Time Server");
+  configTime(3600 * timezone, 0, "time.nist.gov", "0.br.pool.ntp.org", "1.br.pool.ntp.org");
 }
 
-int h = 1;
-int m = 0;
-
 void loop() {
-  if (h == 13) { h = 1; }
-  if (m == 60) { m = 0; }
-  demo(h,m);
-  h += 1; m += 1;
+  struct tm tmstruct ;
+  getLocalTime(&tmstruct);
+  int h = tmstruct.tm_hour % 12;
+  int m = tmstruct.tm_min;
+  int md = trunc(m / 10);
+  int mu = m % 10;
+  if (h == 0) {
+    h = 12;
+  }
+  if (h == 0 && m == 0 && tmstruct.tm_sec <= 2) { 
+    Serial.println("Contacting Time Server");
+    configTime(3600 * timezone, 0, "time.nist.gov", "0.br.pool.ntp.org", "1.br.pool.ntp.org");
+  }
+  // if (m == 60) { m = 0; }
+  // demo(h,m);
+  // h += 1; m += 1;
+
+  hour(h);
+  minute_dec(md);
+  minute_uni(mu);
+  separator(WHITE);
+  oled.display();
+
+  Serial.println("h: " + String(h) + " | md: " + String(md) + " | mu: " + String(mu));
+  
+
+  delay(500);
+  separator(BLACK);
+  oled.display();
+  delay(500);
+
 }
