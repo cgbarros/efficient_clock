@@ -261,6 +261,33 @@ void minute_uni(int n) {
   }
 }
 
+void demo(int h, int m) {
+  int md = trunc(m / 10);
+  int mu = m % 10;
+
+  Serial.print("h: ");
+  Serial.print(h);
+  Serial.print(" | ");
+
+  Serial.print("md: ");
+  Serial.print(md);
+  Serial.print(" | ");
+
+  Serial.print("mu: ");
+  Serial.print(mu);
+  Serial.print("\n");
+
+  delay(500);
+  separator(BLACK);
+  oled.display();
+  delay(500);
+  separator(WHITE);
+  hour(h);
+  minute_dec(md);
+  minute_uni(mu);
+  oled.display();
+}
+
 void setup() {
   Serial.begin(9600);
 
@@ -294,42 +321,11 @@ void setup() {
 }
 
 int h = 1;
-int md = 0;
-int mu = 0;
+int m = 0;
 
 void loop() {
-  if (h == 13) {
-    h = 1;
-  }
-
-  if (md == 6) {
-    md = 0;
-  }
-
-  if (mu == 10) {
-    mu = 0;
-  }
-
-  // Serial.print("h: ");
-  // Serial.print(h);
-  // Serial.print(" | ");
-
-  // Serial.print("md: ");
-  // Serial.print(md);
-  // Serial.print(" | ");
-
-  // Serial.print("mu: ");
-  // Serial.print(mu);
-  // Serial.print("\n");
-
-  delay(500);
-  separator(BLACK);
-  oled.display();
-  delay(500);
-  separator(WHITE);
-  hour(h);
-  minute_dec(md);
-  minute_uni(mu);
-  h += 1; md += 1; mu += 1;
-  oled.display();
+  if (h == 13) { h = 1; }
+  if (m == 60) { m = 0; }
+  demo(h,m);
+  h += 1; m += 1;
 }
