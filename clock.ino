@@ -141,9 +141,44 @@ void min_dec_right_i(uint16_t color) {
   oled.drawLine(74, 16, 74, 32, color);
 }
 
+void minute_dec(int n) {
+  switch(n) {
+    case 0:
+      min_dec_bottom(BLACK);
+      min_dec_left_i(BLACK);
+      min_dec_right_i(BLACK);
+      break;
+    case 1:
+      min_dec_bottom(BLACK);
+      min_dec_left_i(WHITE);
+      min_dec_right_i(BLACK);
+      break;
+    case 2:
+      min_dec_bottom(BLACK);
+      min_dec_left_i(WHITE);
+      min_dec_right_i(WHITE);
+      break;
+    case 3:
+      min_dec_bottom(WHITE);
+      min_dec_left_i(BLACK);
+      min_dec_right_i(BLACK);
+      break;
+    case 4:
+      min_dec_bottom(WHITE);
+      min_dec_left_i(WHITE);
+      min_dec_right_i(BLACK);
+      break;
+    case 5:
+      min_dec_bottom(WHITE);
+      min_dec_left_i(WHITE);
+      min_dec_right_i(WHITE);
+      break;
+  }
+}
+
 void min_uni_v (uint16_t color) {
-  oled.drawLine(96, 22, 108, 54, color);
-  oled.drawLine(108, 54, 120, 22, color);
+  oled.drawLine(98, 24, 108, 52, color);
+  oled.drawLine(108, 52, 118, 24, color);
 }
 
 void min_uni_top (uint16_t color) {
@@ -161,6 +196,71 @@ void min_uni_right (uint16_t color) {
   oled.drawLine(124, 30, 124, 46, color);
 }
 
+void minute_uni(int n) {
+  switch(n) {
+    case 0:
+      min_uni_v(BLACK);
+      min_uni_top(BLACK);
+      min_uni_left(BLACK);
+      min_uni_right(BLACK);
+      break;
+    case 1:
+      min_uni_v(BLACK);
+      min_uni_top(BLACK);
+      min_uni_left(WHITE);
+      min_uni_right(BLACK);
+      break;
+    case 2:
+      min_uni_v(BLACK);
+      min_uni_top(BLACK);
+      min_uni_left(WHITE);
+      min_uni_right(WHITE);
+      break;
+    case 3:
+      min_uni_v(BLACK);
+      min_uni_top(WHITE);
+      min_uni_left(BLACK);
+      min_uni_right(BLACK);
+      break;
+    case 4:
+      min_uni_v(WHITE);
+      min_uni_top(BLACK);
+      min_uni_left(WHITE);
+      min_uni_right(BLACK);
+      break;
+    case 5:
+      min_uni_v(WHITE);
+      min_uni_top(BLACK);
+      min_uni_left(BLACK);
+      min_uni_right(BLACK);
+      break;
+    case 6:
+      min_uni_v(WHITE);
+      min_uni_top(BLACK);
+      min_uni_left(BLACK);
+      min_uni_right(WHITE);
+      break;
+    case 7:
+      min_uni_v(WHITE);
+      min_uni_top(BLACK);
+      min_uni_left(WHITE);
+      min_uni_right(WHITE);
+      break;
+    case 8:
+      min_uni_v(WHITE);
+      min_uni_top(WHITE);
+      min_uni_left(BLACK);
+      min_uni_right(BLACK);
+      break;
+    case 9:
+      min_uni_v(WHITE);
+      min_uni_top(WHITE);
+      min_uni_left(BLACK);
+      min_uni_right(WHITE);
+      break;
+  }
+}
+
 void setup() {
   Serial.begin(9600);
 
@@ -171,7 +271,7 @@ void setup() {
   }
 
   // delay(2000);         // wait two seconds for initializing
-  // oled.clearDisplay(); // clear display
+  oled.clearDisplay(); // clear display
 
   // hour_top_v(WHITE);
   // hour_bottom_v(WHITE);
@@ -179,7 +279,7 @@ void setup() {
   // hour_right_i(WHITE);
   // hour_top_i(WHITE);
 
-  separator(WHITE);
+  // separator(WHITE);
 
   // min_dec_bottom(WHITE);
   // min_dec_left_i(WHITE);
@@ -190,37 +290,46 @@ void setup() {
   // min_uni_left(WHITE);
   // min_uni_right(WHITE);
 
-  
-  
-
-
-  // oled.setTextSize(1);         // set text size
-  // oled.setTextColor(WHITE);    // set text color
-  // oled.setCursor(0, 2);       // set position to display (x,y)
-  // oled.println("Robotronix"); // set text
-  oled.display();              // display on OLED
+  oled.display();
 }
 
-int i = 1;
+int h = 1;
+int md = 0;
+int mu = 0;
 
 void loop() {
-  if (i == 13) {
-    i = 1;
+  if (h == 13) {
+    h = 1;
   }
 
+  if (md == 6) {
+    md = 0;
+  }
+
+  if (mu == 10) {
+    mu = 0;
+  }
+
+  // Serial.print("h: ");
+  // Serial.print(h);
+  // Serial.print(" | ");
+
+  // Serial.print("md: ");
+  // Serial.print(md);
+  // Serial.print(" | ");
+
+  // Serial.print("mu: ");
+  // Serial.print(mu);
+  // Serial.print("\n");
+
   delay(500);
-  oled.clearDisplay();
   separator(BLACK);
   oled.display();
   delay(500);
-  oled.clearDisplay();
   separator(WHITE);
-  hour(i);
-  // oled.setTextSize(1);         // set text size
-  // oled.setTextColor(WHITE);    // set text color
-  // oled.setCursor(0, 2);       // set position to display (x,y)
-  // oled.println(12);
-  // oled.println(i);
-  i += 1;
+  hour(h);
+  minute_dec(md);
+  minute_uni(mu);
+  h += 1; md += 1; mu += 1;
   oled.display();
 }
